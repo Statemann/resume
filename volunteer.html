@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Volunteer — The Witness Missions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--red:#b22020;--red-light:#e04545;--cream:#e8c45a;--dark:#070f0a;--mid:#0b1a10;--muted:#d4a017;}
+    html{scroll-behavior:smooth}
+    body{background:var(--dark);color:#d4a017;font-family:'Lato',sans-serif;font-weight:300;overflow-x:hidden}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(5,12,6,0.98),transparent);backdrop-filter:blur(6px)}
+    .nav-logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none}
+    .nav-cross{width:26px;height:26px;position:relative;flex-shrink:0}
+    .nav-cross::before{content:'';position:absolute;width:4px;height:100%;background:var(--red);left:50%;transform:translateX(-50%);border-radius:2px}
+    .nav-cross::after{content:'';position:absolute;width:100%;height:4px;background:var(--red);top:30%;border-radius:2px}
+    .nav-wordmark{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--cream);text-transform:uppercase}
+    .nav-wordmark span{color:var(--red-light)}
+    .nav-btn{font-family:'Cinzel',serif;font-size:0.63rem;letter-spacing:0.2em;color:var(--red-light);text-decoration:none;text-transform:uppercase;border:1px solid rgba(40,140,70,0.45);padding:0.5rem 1.2rem;border-radius:2px;transition:all 0.2s}
+    .nav-btn:hover{border-color:#5abf8a;background:rgba(8,45,18,0.25)}
+
+    /* PARTICLES */
+    .particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .particle{position:absolute;width:2px;height:2px;background:rgba(60,180,90,0.45);border-radius:50%;animation:rise linear infinite;opacity:0}
+    @keyframes rise{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.5}90%{opacity:0.2}100%{transform:translateY(-10vh) translateX(20px);opacity:0}}
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;text-align:center;padding:2rem}
+    .hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 50% at 50% 38%,rgba(10,40,20,0.35) 0%,transparent 70%),radial-gradient(ellipse 100% 60% at 50% 100%,rgba(3,15,6,0.9) 0%,transparent 60%)}
+    .hero-cross-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;opacity:0.03;pointer-events:none}
+    .hero-cross-bg::before{content:'';position:absolute;width:28px;height:100%;background:rgba(60,180,90,0.5);left:50%;transform:translateX(-50%);border-radius:6px}
+    .hero-cross-bg::after{content:'';position:absolute;width:100%;height:28px;background:rgba(60,180,90,0.5);top:30%;border-radius:6px}
+    .hero-logo{width:clamp(140px,22vw,220px);margin-bottom:2rem;opacity:0;animation:fadeUp 1s ease 0.2s forwards;filter:drop-shadow(0 0 40px rgba(178,32,32,0.35))}
+    .hero-eyebrow{font-family:'Cinzel',serif;font-size:0.67rem;letter-spacing:0.35em;color:var(--red-light);text-transform:uppercase;margin-bottom:1.2rem;opacity:0;animation:fadeUp 1s ease 0.4s forwards}
+    .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,8vw,6.5rem);font-weight:300;line-height:1.05;margin-bottom:1.6rem;opacity:0;animation:fadeUp 1s ease 0.7s forwards;color:#e8c45a}
+    .hero-title em{font-style:italic;color:var(--red-light)}
+    .hero-verse{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#d4a017;max-width:520px;line-height:1.8;margin-bottom:0.5rem;opacity:0;animation:fadeUp 1s ease 1s forwards}
+    .verse-ref{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--red-light);opacity:0;animation:fadeUp 1s ease 1.2s forwards}
+    .hero-cta{margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp 1s ease 1.5s forwards}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .btn{display:inline-block;font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.22em;text-transform:uppercase;padding:1rem 2.6rem;border-radius:2px;text-decoration:none;cursor:pointer;transition:all 0.3s;border:none}
+    .btn-fill{color:var(--dark);background:var(--cream)}
+    .btn-fill:hover{background:#f0d070;transform:translateY(-2px)}
+    .btn-outline{color:var(--red-light);background:transparent;border:1px solid rgba(178,32,32,0.5)}
+    .btn-outline:hover{border-color:var(--red-light);background:rgba(178,32,32,0.1);transform:translateY(-2px)}
+    .scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0;animation:fadeUp 1s ease 2s forwards}
+    .scroll-cue span{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.3em;color:var(--red-light);text-transform:uppercase}
+    .scroll-line{width:1px;height:46px;background:linear-gradient(to bottom,#4caf7d,transparent);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    /* SECTIONS */
+    section{padding:6rem 1.5rem}
+    .wrap{max-width:900px;margin:0 auto}
+    .tag{font-family:'Cinzel',serif;font-size:0.63rem;letter-spacing:0.35em;color:var(--red-light);text-transform:uppercase;margin-bottom:1.2rem;display:block}
+    .title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.4rem);font-weight:300;line-height:1.15;margin-bottom:1.6rem;color:#e8c45a}
+    .title em{font-style:italic;color:var(--red-light)}
+    .body{font-size:1.05rem;color:#d4a017;line-height:1.9;max-width:660px}
+
+    /* VISION */
+    .s-vision{background:rgba(178,32,32,0.04);border-top:1px solid rgba(40,140,70,0.22);border-bottom:1px solid rgba(40,140,70,0.22)}
+    .vision-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3rem;align-items:center}
+    .vision-stat{text-align:center;padding:2rem;border:1px solid rgba(40,140,70,0.2);border-radius:3px;background:rgba(8,35,15,0.1)}
+    .stat-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;color:#e8c45a;line-height:1}
+    .stat-label{font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:0.22em;color:var(--red-light);text-transform:uppercase;margin-top:0.5rem}
+
+    /* PROMISE BANNER */
+    .s-promise{padding:5rem 2rem;background:#081508;text-align:center;position:relative;overflow:hidden}
+    .s-promise::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(10,50,20,0.2) 0%,transparent 70%);pointer-events:none}
+    .promise-q{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.3rem,3vw,2rem);line-height:1.75;color:#e8c45a;max-width:680px;margin:0 auto 1.2rem}
+    .promise-q span{color:var(--red-light);font-style:normal}
+
+    /* ROLES */
+    .s-roles{background:var(--dark)}
+    .roles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-top:3.5rem}
+    .role-card{padding:2.2rem 1.8rem;border:1px solid rgba(40,140,70,0.2);border-radius:3px;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;cursor:default}
+    .role-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,rgba(10,50,20,0.15) 0%,transparent 70%);pointer-events:none}
+    .role-card:hover{border-color:rgba(60,200,100,0.5);transform:translateY(-4px)}
+    .role-icon{font-size:2rem;margin-bottom:1rem;display:block}
+    .role-title{font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.18em;color:var(--red-light);margin-bottom:0.8rem;text-transform:uppercase}
+    .role-desc{font-size:0.95rem;color:#d4a017;line-height:1.75;margin-bottom:1.2rem}
+    .role-tag{display:inline-block;font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.15em;color:#4caf7d;border:1px solid rgba(60,180,90,0.3);padding:0.3rem 0.7rem;border-radius:20px;text-transform:uppercase}
+
+    /* QUALITIES */
+    .s-qualities{background:rgba(8,35,15,0.09);border-top:1px solid rgba(40,140,70,0.14);border-bottom:1px solid rgba(40,140,70,0.14)}
+    .qualities-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:3rem}
+    .quality{display:flex;align-items:flex-start;gap:1rem;padding:1.5rem;border-left:2px solid var(--red);background:rgba(8,35,15,0.1)}
+    .quality-icon{color:var(--red);font-size:1.2rem;flex-shrink:0;margin-top:0.1rem}
+    .quality-text{font-size:0.95rem;color:#d4a017;line-height:1.65}
+    .quality-title{font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:0.15em;color:#e8c45a;text-transform:uppercase;margin-bottom:0.4rem}
+
+    /* FORM */
+    .s-form{background:#081508;border-top:1px solid rgba(40,140,70,0.2)}
+    .form-wrap{max-width:700px;margin:3rem auto 0}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
+    .form-group{display:flex;flex-direction:column;gap:0.45rem;margin-bottom:1.2rem}
+    .form-group.no-mb{margin-bottom:0}
+    .form-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.25em;color:var(--red-light);text-transform:uppercase}
+    .form-input,.form-select,.form-textarea{background:rgba(10,50,20,0.08);border:1px solid rgba(40,140,70,0.32);border-radius:2px;color:#d4a017;font-family:'Lato',sans-serif;font-size:0.95rem;font-weight:300;padding:0.85rem 1rem;outline:none;transition:border-color 0.2s,background 0.2s;width:100%}
+    .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d94040' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+    .form-select option{background:#0b1a10;color:#d4a017}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#5abf8a;background:rgba(8,40,18,0.2)}
+    .form-input::placeholder,.form-textarea::placeholder{color:rgba(212,160,23,0.4)}
+    .form-textarea{resize:vertical;min-height:110px;line-height:1.7}
+
+    /* CHECKBOXES FOR ROLES */
+    .roles-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:0.5rem}
+    .role-check{display:flex;align-items:center;gap:0.7rem;padding:0.8rem 1rem;border:1px solid rgba(40,140,70,0.2);border-radius:3px;cursor:pointer;transition:border-color 0.2s,background 0.2s}
+    .role-check:hover{border-color:rgba(60,180,90,0.4);background:rgba(8,35,15,0.15)}
+    .role-check input[type=checkbox]{appearance:none;width:16px;height:16px;border:1px solid rgba(40,140,70,0.45);border-radius:2px;background:transparent;cursor:pointer;flex-shrink:0;transition:all 0.2s;position:relative}
+    .role-check input[type=checkbox]:checked{background:var(--red);border-color:var(--red)}
+    .role-check input[type=checkbox]:checked::after{content:'✓';position:absolute;color:#fff;font-size:0.62rem;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .role-check label{font-size:0.88rem;color:#d4a017;cursor:pointer;line-height:1.3}
+
+    .form-check{display:flex;align-items:flex-start;gap:0.85rem;margin-bottom:1.1rem}
+    .form-check input[type=checkbox]{appearance:none;width:18px;height:18px;border:1px solid rgba(40,140,70,0.45);border-radius:2px;background:transparent;cursor:pointer;flex-shrink:0;margin-top:2px;transition:all 0.2s;position:relative}
+    .form-check input[type=checkbox]:checked{background:var(--red);border-color:var(--red)}
+    .form-check input[type=checkbox]:checked::after{content:'✓';position:absolute;color:#fff;font-size:0.68rem;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .form-check label{font-size:0.93rem;color:#d4a017;line-height:1.5;cursor:pointer}
+    .form-submit{display:flex;justify-content:center;margin-top:2rem}
+    .form-error{display:none;text-align:center;color:var(--red-light);font-size:0.88rem;margin-top:1rem;font-style:italic}
+
+    /* FOOTER */
+    footer{background:#050e06;border-top:1px solid rgba(40,140,70,0.2);padding:4rem 2rem 3rem;text-align:center}
+    .footer-logo{width:120px;margin:0 auto 1.5rem;display:block;opacity:0.85}
+    .footer-verse{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#c49a10;margin-bottom:0.5rem}
+    .footer-tag{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.25em;color:rgba(212,160,23,0.55);text-transform:uppercase;margin-top:1rem}
+    .footer-copy{font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.18em;color:rgba(212,160,23,0.35);text-transform:uppercase;margin-top:2rem}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.75s ease,transform 0.75s ease}
+    .reveal.on{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      nav{padding:0.9rem 1.2rem}
+      .nav-wordmark{font-size:0.6rem}
+      .nav-btn{font-size:0.55rem;padding:0.4rem 0.8rem}
+      .hero{padding:5rem 1.2rem 2rem}
+      .hero-logo{width:140px}
+      .hero-cta{flex-direction:column;align-items:center}
+      .btn{width:100%;max-width:280px;text-align:center}
+      section{padding:3.5rem 1.2rem}
+      .vision-grid{grid-template-columns:1fr;gap:1.5rem}
+      .roles-grid{grid-template-columns:1fr}
+      .qualities-list{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr;gap:0}
+      .roles-check-grid{grid-template-columns:1fr 1fr}
+      .scroll-cue{display:none}
+      footer{padding:3rem 1.2rem 2rem}
+    }
+    @media(max-width:400px){
+      .hero-title{font-size:2.4rem}
+      .nav-wordmark{display:none}
+      .title{font-size:1.7rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-cross"></div>
+    <span class="nav-wordmark">The Witness <span>Missions</span></span>
+  </a>
+  <a href="#apply" class="nav-btn">Apply Now</a>
+</nav>
+
+<div class="particles" id="particles"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-cross-bg"></div>
+  <img src="logo.png" alt="The Witness Missions" class="hero-logo"/>
+  <p class="hero-eyebrow">Join the Mission</p>
+  <h1 class="hero-title">Called to <em>Serve.</em><br>Built to <em>Impact.</em></h1>
+  <p class="hero-verse">"For we are God's handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do."</p>
+  <p class="verse-ref">Ephesians 2:10</p>
+  <div class="hero-cta">
+    <a href="#apply" class="btn btn-fill">Apply to Volunteer</a>
+    <a href="#roles" class="btn btn-outline">See Roles</a>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- VISION -->
+<section class="s-vision" id="vision">
+  <div class="wrap">
+    <span class="tag reveal">Our Vision</span>
+    <h2 class="title reveal">Every believer is <em>equipped</em><br>to make a difference.</h2>
+    <p class="body reveal">At The Witness Missions, we believe the Great Commission is not a calling for a select few — it belongs to every child of God. We are looking for passionate, Spirit-filled individuals who are ready to give their time, gifts, and energy to the advancement of the Gospel.</p>
+    <div class="vision-grid" style="margin-top:3rem">
+      <div class="vision-stat reveal">
+        <div class="stat-num">✝</div>
+        <div class="stat-label">Gospel-Centred</div>
+      </div>
+      <div class="vision-stat reveal">
+        <div class="stat-num">🌍</div>
+        <div class="stat-label">Kingdom Impact</div>
+      </div>
+      <div class="vision-stat reveal">
+        <div class="stat-num">🔥</div>
+        <div class="stat-label">Spirit-Led</div>
+      </div>
+      <div class="vision-stat reveal">
+        <div class="stat-num">🤝</div>
+        <div class="stat-label">Community-Driven</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMISE BANNER -->
+<div class="s-promise">
+  <p class="promise-q reveal">"The harvest is plentiful, but the workers are few.<br>Ask the Lord of the harvest, therefore,<br>to send out <span>workers into his harvest field.</span>"</p>
+  <p style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--red-light);opacity:1" class="reveal">Luke 10:2</p>
+</div>
+
+<!-- ROLES -->
+<section class="s-roles" id="roles">
+  <div class="wrap">
+    <span class="tag reveal">Available Roles</span>
+    <h2 class="title reveal">Find your <em>place</em><br>in the mission.</h2>
+    <p class="body reveal">Every gift has a place here. Whether you are a speaker, a creator, an intercessor, or a teacher — there is a role designed for who God made you to be.</p>
+    <div class="roles-grid">
+
+      <div class="role-card reveal">
+        <span class="role-icon">🌍</span>
+        <div class="role-title">Evangelism & Outreach</div>
+        <p class="role-desc">Take the Gospel to the streets, campuses, and communities. Share your faith boldly and help connect people to Christ through personal witness and organised outreach events.</p>
+        <span class="role-tag">Field Ministry</span>
+      </div>
+
+      <div class="role-card reveal">
+        <span class="role-icon">🎥</span>
+        <div class="role-title">Media & Content Creation</div>
+        <p class="role-desc">Use your creative gifts to produce videos, graphics, social media content, and podcast materials that carry the message of the Gospel to digital audiences around the world.</p>
+        <span class="role-tag">Creative</span>
+      </div>
+
+      <div class="role-card reveal">
+        <span class="role-icon">🙏</span>
+        <div class="role-title">Prayer Team</div>
+        <p class="role-desc">Undergird the ministry through intercession. Join a team of dedicated prayer warriors who cover the mission, its leaders, and its reach with consistent, faith-filled prayer.</p>
+        <span class="role-tag">Intercession</span>
+      </div>
+      <p class="role-desc">Create a warm, welcoming atmosphere at every gathering. Welcome visitors, coordinate seating, assist with logistics, and ensure every person who walks through the door feels seen, valued, and at home.</p>
+        <span class="role-tag">Hospitality</span>
+      </div>
+
+      <div class="role-card reveal">
+        <span class="role-icon">📖</span>
+        <div class="role-title">Teaching & Discipleship</div>
+        <p class="role-desc">Help new and growing believers become rooted in the Word. Lead Bible studies, mentor individuals, and walk alongside others on their journey of faith and transformation.</p>
+        <span class="role-tag">Discipleship</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- QUALITIES WE LOOK FOR -->
+<section class="s-qualities">
+  <div class="wrap">
+    <span class="tag reveal">Who We're Looking For</span>
+    <h2 class="title reveal">You don't need to be <em>perfect.</em><br>Just available.</h2>
+    <p class="body reveal">God doesn't call the qualified — He qualifies the called. Here's what matters most to us:</p>
+    <div class="qualities-list">
+      <div class="quality reveal">
+        <span class="quality-icon">✝</span>
+        <div>
+          <div class="quality-title">Born Again</div>
+          <div class="quality-text">A genuine, personal relationship with Jesus Christ is the foundation of everything we do.</div>
+        </div>
+      </div>
+      <div class="quality reveal">
+        <span class="quality-icon">🔥</span>
+        <div>
+          <div class="quality-title">Passionate</div>
+          <div class="quality-text">A burning desire to see souls saved and the Kingdom of God expanded.</div>
+        </div>
+      </div>
+      <div class="quality reveal">
+        <span class="quality-icon">🤝</span>
+        <div>
+          <div class="quality-title">Teachable</div>
+          <div class="quality-text">A humble heart that is open to learning, correction, and growth in community.</div>
+        </div>
+      </div>
+      <div class="quality reveal">
+        <span class="quality-icon">⏱</span>
+        <div>
+          <div class="quality-title">Committed</div>
+          <div class="quality-text">Willing to show up consistently and give your best to the work of the ministry.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section class="s-form" id="apply">
+  <div class="wrap">
+    <span class="tag reveal">Volunteer Application</span>
+    <h2 class="title reveal">Ready to <em>answer</em><br>the call?</h2>
+    <p class="body reveal">Fill in the form below and our team will be in touch to walk you through the next steps. We can't wait to serve alongside you.</p>
+
+    <div class="form-wrap">
+      <form id="volunteerForm" method="POST" action="https://formspree.io/f/mojnknab">
+        <input type="hidden" name="_next" value="/success.html"/>
+        <input type="hidden" name="_subject" value="New Volunteer Application — The Witness Missions"/>
+        <input type="hidden" name="form-type" value="volunteer"/>
+
+        <div class="form-row">
+          <div class="form-group no-mb reveal">
+            <label class="form-label" for="firstName">First Name *</label>
+            <input class="form-input" type="text" id="firstName" name="firstName" placeholder="Your first name"/>
+          </div>
+          <div class="form-group no-mb reveal">
+            <label class="form-label" for="lastName">Last Name *</label>
+            <input class="form-input" type="text" id="lastName" name="lastName" placeholder="Your last name"/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group no-mb reveal">
+            <label class="form-label" for="email">Email Address *</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com"/>
+          </div>
+          <div class="form-group no-mb reveal">
+            <label class="form-label" for="phone">Phone Number *</label>
+            <input class="form-input" type="tel" id="phone" name="phone" placeholder="+1 (000) 000-0000"/>
+          </div>
+        </div>
+
+        <div class="form-group reveal">
+          <label class="form-label" for="city">City / Country *</label>
+          <input class="form-input" type="text" id="city" name="city" placeholder="Where are you based?"/>
+        </div>
+
+        <div class="form-group reveal">
+          <label class="form-label" for="age">Age Range</label>
+          <select class="form-select" id="age" name="age">
+            <option value="" disabled selected>Select your age range</option>
+            <option value="16-20">16 – 20</option>
+            <option value="21-25">21 – 25</option>
+            <option value="26-35">26 – 35</option>
+            <option value="36-45">36 – 45</option>
+            <option value="46+">46 and above</option>
+          </select>
+        </div>
+
+        <div class="form-group reveal">
+          <label class="form-label">Which role(s) are you interested in? *</label>
+          <div class="roles-check-grid">
+            <label class="role-check"><input type="checkbox" name="role-evangelism" value="Evangelism & Outreach"/><span>🌍 Evangelism & Outreach</span></label>
+            <label class="role-check"><input type="checkbox" name="role-media" value="Media & Content Creation"/><span>🎥 Media & Content</span></label>
+            <label class="role-check"><input type="checkbox" name="role-prayer" value="Prayer Team"/><span>🙏 Prayer Team</span></label>
+            <label class="role-check"><input type="checkbox" name="role-teaching" value="Teaching & Discipleship"/><span>📖 Teaching & Discipleship</span></label>
+          </div>
+        </div>
+
+        <div class="form-group reveal">
+          <label class="form-label" for="experience">Relevant Experience or Skills</label>
+          <textarea class="form-textarea" id="experience" name="experience" placeholder="Tell us about any relevant skills, experience, or spiritual gifts you'd like to bring to the mission…"></textarea>
+        </div>
+
+        <div class="form-group reveal">
+          <label class="form-label" for="motivation">Why do you want to volunteer?</label>
+          <textarea class="form-textarea" id="motivation" name="motivation" placeholder="Share what's stirring in your heart about joining The Witness Missions…"></textarea>
+        </div>
+
+        <div class="form-check reveal">
+          <input type="checkbox" id="churchMember" name="churchMember" value="yes"/>
+          <label for="churchMember">I am currently an active member of a local church.</label>
+        </div>
+
+        <div class="form-check reveal">
+          <input type="checkbox" id="agreement" name="agreement" value="yes"/>
+          <label for="agreement">I am committed to the values of The Witness Missions and am ready to serve with consistency and integrity.</label>
+        </div>
+
+        <div class="form-submit reveal">
+          <button type="submit" class="btn btn-fill" onclick="return validateForm()">Submit Application ✝</button>
+        </div>
+        <p class="form-error" id="formError">Please fill in all required fields before submitting.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logo.png" alt="The Witness Missions" class="footer-logo"/>
+  <p class="footer-verse">"How beautiful are the feet of those who bring good news." — Romans 10:15</p>
+  <p class="footer-tag">Called · Equipped · Sent</p>
+  <p class="footer-copy">© The Witness Missions. All rights reserved.</p>
+</footer>
+
+<script>
+  // Particles
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = (Math.random()*100)+'%';
+    p.style.animationDuration = (12+Math.random()*20)+'s';
+    p.style.animationDelay = (Math.random()*22)+'s';
+    const s = (1+Math.random()*2.5)+'px';
+    p.style.width = p.style.height = s;
+    pc.appendChild(p);
+  }
+
+  // Scroll reveal
+  const ro = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); ro.unobserve(e.target); }
+  }), {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+  // Form validation
+  function validateForm() {
+    const fn = document.getElementById('firstName').value.trim();
+    const ln = document.getElementById('lastName').value.trim();
+    const em = document.getElementById('email').value.trim();
+    const ph = document.getElementById('phone').value.trim();
+    const ci = document.getElementById('city').value.trim();
+    const roles = document.querySelectorAll('.role-check input:checked');
+    const agreed = document.getElementById('agreement').checked;
+    const err = document.getElementById('formError');
+
+    if (!fn || !ln || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em) || !ph || !ci || roles.length === 0 || !agreed) {
+      err.style.display = 'block';
+      err.scrollIntoView({behavior:'smooth', block:'center'});
+      return false;
+    }
+    err.style.display = 'none';
+    return true;
+  }
+</script>
+</body>
+</html>
